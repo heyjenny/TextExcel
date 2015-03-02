@@ -15,7 +15,7 @@ public class ExpressionSolver {
         return parseTerm();
     }
 
-    public void setStr(String str) { this.str = str; this.index = 0; this.currChar = str.charAt(index);}
+    public ExpressionSolver setStr(String str) { this.str = str; this.index = 0; this.currChar = str.charAt(index); return this; }
 
     public char getCurrChar() { return currChar;}
 
@@ -69,21 +69,21 @@ public class ExpressionSolver {
         String termtest3 = " 5.3";
 
         solver.setStr(numtest);
-        if (solver.parseNumber() == 3.0) {
+        if (solver.parseNumberOrCell() == 3.0) {
             System.out.println("OK");
         } else {
             System.out.println("ERROR");
         }
 
         solver.setStr(numtest2);
-        if (solver.parseNumber() == 32.0) {
+        if (solver.parseNumberOrCell() == 32.0) {
             System.out.println("OK");
         } else {
             System.out.println("ERROR");
         }
 
         solver.setStr(numtest3);
-        if (solver.parseNumber() == 75.4) {
+        if (solver.parseNumberOrCell() == 75.4) {
             System.out.println("OK");
         } else {
             System.out.println("ERROR");
@@ -143,10 +143,22 @@ public class ExpressionSolver {
 
     }
 
+    public double cellToValue(String cellRef) {
+        return 0.0;
+    }
 
-
-    public double parseNumber(){
+    public double parseNumberOrCell(){
         StringBuilder digits = new StringBuilder();
+
+        if (Character.isAlphabetic(currChar)){
+            digits.append(currChar);
+            consumeCharacter();
+            while (Character.isDigit(currChar) || currChar == '.') {
+                digits.append(currChar);
+                consumeCharacter();
+            }
+            return cellToValue(digits.toString());
+        }
 
         while (Character.isDigit(currChar) || currChar == '.') {
             digits.append(currChar);
@@ -179,7 +191,7 @@ public class ExpressionSolver {
     }
     public double parseFactor() {
         consumeSpace();
-        double lvalue = parseNumber();
+        double lvalue = parseNumberOrCell();
 
         for (;;) {
             consumeSpace();
@@ -187,12 +199,12 @@ public class ExpressionSolver {
             if (operation == '*') {
                 consumeCharacter();
                 consumeSpace();
-                double rvalue = parseNumber();
+                double rvalue = parseNumberOrCell();
                 lvalue *= rvalue;
             } else if (operation == '/') {
                 consumeCharacter();
                 consumeSpace();
-                double rvalue = parseNumber();
+                double rvalue = parseNumberOrCell();
                 lvalue /= rvalue;
             } else {
                 return lvalue;
