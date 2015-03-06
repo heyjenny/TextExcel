@@ -5,11 +5,13 @@ public class ExpressionSolver {
     private char currChar;
     private int index;
     String str;
+    private Application app;
 
-    public ExpressionSolver(String str){
+    public ExpressionSolver(Application app, String str){
         index = 0;
         this.str = str;
         currChar = str.charAt(index);
+        this.app = app;
     }
     public double solve () {
         return parseTerm();
@@ -33,7 +35,7 @@ public class ExpressionSolver {
         String test2 = "a   b";
         String test3 = "a  ";
 
-        ExpressionSolver solver = new ExpressionSolver(test1);
+        ExpressionSolver solver = new ExpressionSolver(null, test1);
         solver.consumeCharacter();
         solver.consumeSpace();
         if (solver.getCurrChar() == 'b') {
@@ -42,7 +44,7 @@ public class ExpressionSolver {
             System.out.println("ERROR");
         }
 
-        ExpressionSolver solver2 = new ExpressionSolver(test2);
+        ExpressionSolver solver2 = new ExpressionSolver(null, test2);
         solver2.consumeCharacter();
         solver2.consumeSpace();
         if (solver2.getCurrChar() == 'b') {
@@ -51,7 +53,7 @@ public class ExpressionSolver {
             System.out.println("ERROR");
         }
 
-        ExpressionSolver solver3 = new ExpressionSolver(test3);
+        ExpressionSolver solver3 = new ExpressionSolver(null, test3);
         solver3.consumeCharacter();
         solver3.consumeSpace();
         if (solver3.getCurrChar() == (char) -1) {
@@ -144,7 +146,7 @@ public class ExpressionSolver {
     }
 
     public double cellToValue(String cellRef) {
-        return 0.0;
+        return app.getSpreadsheet().getCell(CommandParser.lettersToNumbers(cellRef)).getValue().getDoubleValue();
     }
 
     public double parseNumberOrCell(){

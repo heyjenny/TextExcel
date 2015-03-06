@@ -8,7 +8,7 @@ public class ExpressionSolverTest {
 
     class ExpressionSolverStub extends ExpressionSolver {
         public ExpressionSolverStub(String str) {
-            super(str);
+            super(null, str);
         }
 
         @Override

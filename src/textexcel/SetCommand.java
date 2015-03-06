@@ -23,7 +23,7 @@ public class SetCommand extends GenericCommand implements Command {
 
         CellValue cellNewValue = null;
         if(newFormulaValue != null) {
-            double value = (new textexcel.ExpressionSolver(newFormulaValue)).solve();
+            double value = (new textexcel.ExpressionSolver(application, newFormulaValue)).solve();
             cellNewValue = new CellValue(newFormulaValue, value);
         } else {
             cellNewValue = newDoubleValue != null ? new CellValue(Double.parseDouble(newDoubleValue)) :
