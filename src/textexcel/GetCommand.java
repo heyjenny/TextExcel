@@ -1,6 +1,4 @@
-/**
- * Created by hey_jenny on 2/6/15.
- */
+
 package textexcel;
 
 public class GetCommand extends GenericCommand implements Command {
