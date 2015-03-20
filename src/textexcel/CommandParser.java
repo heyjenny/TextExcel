@@ -12,8 +12,9 @@ import java.util.regex.Pattern;
 
 public class CommandParser {
     public static final String CELL_REFERENCE_REGEX = "^([A-Z]{1})(\\d+)$";
-    public static final String SET_COMMAND_REGEX = "^([A-Z]\\d+)\\s*=\\s*(?:\"(?<string>[\\w\\s]*)\"|(?<number>\\d*\\.?\\d*)|\\((?<formula>[A-Z0-9 +-/*]*)\\)\\s*)$";
+    public static final String SET_COMMAND_REGEX = "^([A-Z]\\d+)\\s*=\\s*(?:\"(?<string>[\\w\\s]*)\"|(?<number>\\d*\\.?\\d*)|\\((?<formula>[A-Z0-9 +-/*]*)\\)\\s*|\\((?<function>\\s*(sum|avg)\\s*[A-Z]{1}\\d+\\s*-\\s*[A-Z]{1}\\d+\\s*)\\))$";
     public static final String CLEAR_COMMAND_REGEX = "(^clear (?<cell>([A-Z]{1})(\\d+))|(^clear))";
+
 
     private Map<Pattern, Command> commands = new HashMap<Pattern, Command>();
 
@@ -23,6 +24,7 @@ public class CommandParser {
         commands.put(Pattern.compile(CELL_REFERENCE_REGEX), new GetCommand(app));
         commands.put(Pattern.compile(SET_COMMAND_REGEX), new SetCommand(app));
         commands.put(Pattern.compile(CLEAR_COMMAND_REGEX), new ClearCommand(app));
+        commands.put(Pattern.compile("^help$"), new HelpCommand(app));
     }
 
     public static String numbersToLetters(int r, int c) {

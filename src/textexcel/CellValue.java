@@ -1,9 +1,9 @@
 package textexcel;
 
 public class CellValue {
-	public enum ValueType { 
-		EMPTY, NUMBER, STRING, DOUBLE, FORMULA
-		}
+	public enum ValueType {
+        EMPTY, NUMBER, STRING, DOUBLE, FORMULA, FUNCTION
+    }
     private ValueType type; 
     private int intValue;
     private double doubleValue;
@@ -49,12 +49,20 @@ public class CellValue {
         doubleValue = value;
     }
 
-	public void setToEmpty() {
-		type = ValueType.EMPTY; 
+    public void setFunction(String function, double value) {
+        this.setToEmpty();
+        type = ValueType.FUNCTION;
+        stringValue = function;
+        doubleValue = value;
+    }
+
+    public CellValue setToEmpty() {
+        type = ValueType.EMPTY;
 		intValue = 0;
         doubleValue = 0.0f;
 		stringValue = "";
-	}
+        return this;
+    }
 	
 	public ValueType getType() {
 		return type;

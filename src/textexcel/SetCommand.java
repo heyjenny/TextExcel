@@ -18,6 +18,7 @@ public class SetCommand extends GenericCommand implements Command {
         String newStrValue = match.group("string");
         String newDoubleValue = match.group("number");
         String newFormulaValue = match.group("formula");
+        String newFunctionValue = match.group("function");
 
         int [] coordinates = CommandParser.lettersToNumbers(cellReference);
 
@@ -25,11 +26,16 @@ public class SetCommand extends GenericCommand implements Command {
         if(newFormulaValue != null) {
             double value = (new textexcel.ExpressionSolver(application, newFormulaValue)).solve();
             cellNewValue = new CellValue(newFormulaValue, value);
+        } else if (newFunctionValue != null) {
+            double value = (new textexcel.ExpressionSolver(application, newFunctionValue)).solveFunction();
+            cellNewValue = new CellValue();
+            cellNewValue.setFunction(newFunctionValue, value);
         } else {
             cellNewValue = newDoubleValue != null ? new CellValue(Double.parseDouble(newDoubleValue)) :
                     new CellValue(newStrValue);
         }
         application.getSpreadsheet().setCell(coordinates, cellNewValue);
+        application.getSpreadsheet().recalculateCells();
         return true;
     }
 }

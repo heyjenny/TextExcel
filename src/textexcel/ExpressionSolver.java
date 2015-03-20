@@ -1,20 +1,44 @@
 
 package textexcel;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ExpressionSolver {
     private char currChar;
     private int index;
     String str;
     private Application app;
 
-    public ExpressionSolver(Application app, String str){
+    public ExpressionSolver(Application app, String str) {
         index = 0;
         this.str = str;
         currChar = str.charAt(index);
         this.app = app;
     }
-    public double solve () {
+
+    public double solve() {
         return parseTerm();
+    }
+
+    public double solveFunction() {
+        Pattern formulaPattern = Pattern.compile("\\s*(?<name>sum|avg)\\s*(?<start>[A-Z]{1}\\d+)\\s*-\\s*(?<end>[A-Z]{1}\\d+)\\s*");
+        Matcher formulaMatch = formulaPattern.matcher(str);
+        formulaMatch.find();
+        String functionName = formulaMatch.group("name");
+        String startCellRef = formulaMatch.group("start");
+        String endCellRef = formulaMatch.group("end");
+        double value = 0.f;
+        if (functionName.equals("sum")) {
+            value = app.getSpreadsheet().calculateSum(CommandParser.lettersToNumbers(startCellRef),
+                    CommandParser.lettersToNumbers(endCellRef));
+        } else if (functionName.equals("avg")) {
+            value = app.getSpreadsheet().calculateAvg(CommandParser.lettersToNumbers(startCellRef),
+                    CommandParser.lettersToNumbers(endCellRef));
+
+        }
+
+        return value;
     }
 
     public ExpressionSolver setStr(String str) { this.str = str; this.index = 0; this.currChar = str.charAt(index); return this; }

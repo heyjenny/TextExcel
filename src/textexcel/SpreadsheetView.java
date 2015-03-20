@@ -67,6 +67,7 @@ public class SpreadsheetView {
                 valueStr = Integer.toString(val.getIntValue()); break;
             case DOUBLE:
             case FORMULA:
+            case FUNCTION:
                 valueStr = Double.toString(val.getDoubleValue()); break;
 		}
 
@@ -80,6 +81,7 @@ public class SpreadsheetView {
         switch (val.getType() ){
             case EMPTY: System.out.print ("<empty>"); break;
             case FORMULA:
+            case FUNCTION:
                 System.out.print(" ( " + val.getStringValue() + " ) ");
                 break;
             case STRING:
